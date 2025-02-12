@@ -1,10 +1,29 @@
-import Image from "next/image";
-import styles from "../styles/page.module.css";
+"use client";
+
+import { useSession, signOut } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+
+  console.log('session', session)
+
   return (
-    <div className={styles.page}>
-      <div>I am your new app!!!</div>
+    <div>
+      {session ? (
+        <>
+          <h1>Welcome, {session.user.name}</h1>
+          <button onClick={() => signOut()}>Sign Out</button>
+        </>
+      ) : (
+        <>
+          <div>
+            <a href="/auth/signin">Sign In</a>
+          </div>
+          <div>
+            <a href="/auth/signup">Sign Up</a>
+          </div>
+        </>
+      )}
     </div>
   );
 }
