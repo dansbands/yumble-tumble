@@ -17,3 +17,9 @@
   justify-content: flex-start;
   gap: 20px;
 }
+
+.header__right {
+  margin-right: 50px;
+  display: flex;
+  gap: 20px;
+}
