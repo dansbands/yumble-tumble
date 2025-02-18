@@ -2,55 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
 import "styles/header.css";
+import MenuContent from "./MenuContent";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const session = useSession();
-
-  const MenuContent = ({ isDrawer }) => (
-    <>
-      {session?.data ? (
-        <>
-          <Link href="/dashboard" passHref>
-            <div className={isDrawer ? "drawer-link" : "link"}>Dashboard</div>
-          </Link>
-          <Link href="/profile" passHref>
-            <div className={isDrawer ? "drawer-link" : "link"}>Profile</div>
-          </Link>
-          <div
-            className={isDrawer ? "drawer-link" : "link"}
-            onClick={() => signOut()}
-          >
-            Log Out
-          </div>
-          <button
-            className={isDrawer ? "drawer-link" : "link"}
-            onClick={toggleDarkMode}
-          >
-            {isDrawer
-              ? darkMode
-                ? "🌙 Dark Mode"
-                : "☀️ Light Mode"
-              : darkMode
-              ? "🌙"
-              : "☀️"}
-          </button>
-        </>
-      ) : (
-        <>
-          <Link href="/signup" passHref>
-            <div className={isDrawer ? "drawer-link" : "link"}>Sign Up</div>
-          </Link>
-          <Link href="/login" passHref>
-            <div className={isDrawer ? "drawer-link" : "link"}>Sign In</div>
-          </Link>
-        </>
-      )}
-    </>
-  );
 
   // Close the menu when Esc is pressed
   useEffect(() => {
@@ -96,7 +53,7 @@ const Header = () => {
 
       {/* Center & Right - Desktop */}
       <nav className="header__center">
-        <MenuContent />
+        <MenuContent darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       </nav>
 
       {/* Animated Hamburger Button */}
@@ -119,7 +76,11 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <div className={`drawer ${isOpen ? "open" : ""}`}>
-        <MenuContent isDrawer />
+        <MenuContent
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+          isDrawer
+        />
       </div>
     </header>
   );
