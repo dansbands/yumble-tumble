@@ -1,49 +1,80 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import "styles/header.css";
-import { signOut, useSession } from "next-auth/react";
 
 const Header = () => {
-  const session = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Load dark mode from localStorage
+  useEffect(() => {
+    const storedMode = localStorage.getItem("darkMode");
+    if (storedMode === "true") {
+      document.documentElement.classList.add("dark-mode");
+      setDarkMode(true);
+    }
+  }, []);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem("darkMode", newMode);
+    document.documentElement.classList.toggle("dark-mode", newMode);
+  };
 
   return (
-    <div className="header">
+    <header className="header">
+      {/* Left Section */}
       <div className="header__left">
         <Link href="/" passHref>
-          <div className="title">MyNewApp</div>
+          <div className="title">Header</div>
         </Link>
       </div>
-      <div className="header__center">
-        {session?.data ? (
-          <>
-            <Link href="/dashboard" passHref>
-              <div className="link">Dashboard</div>
-            </Link>
-            <Link href="/profile" passHref>
-              <div className="link">Profile</div>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link href="/signup" passHref>
-              <div className="link">Sign Up</div>
-            </Link>
-            <Link href="/login" passHref>
-              <div className="link">Sign In</div>
-            </Link>
-          </>
-        )}
+
+      {/* Center & Right - Desktop */}
+      <nav className="header__center">
+        <Link href="/signup" passHref>
+          <div className="link">Sign Up</div>
+        </Link>
+        <Link href="/login" passHref>
+          <div className="link">Sign In</div>
+        </Link>
+        <div className="link" onClick={() => signOut()}>
+          Log Out
+        </div>
+        <button className="link" onClick={toggleDarkMode}>
+          {darkMode ? "🌙" : "☀️"}
+        </button>
+      </nav>
+
+      {/* Mobile Menu Button */}
+      <button className="menu-btn" onClick={() => setIsOpen(!isOpen)}>
+        ☰
+      </button>
+
+      {/* Mobile Drawer */}
+      <div className={`drawer ${isOpen ? "open" : ""}`}>
+        <button className="close-btn" onClick={() => setIsOpen(false)}>
+          ×
+        </button>
+        <Link href="/signup" passHref>
+          <div className="drawer-link">Sign Up</div>
+        </Link>
+        <Link href="/login" passHref>
+          <div className="drawer-link">Sign In</div>
+        </Link>
+        <div className="drawer-link" onClick={() => signOut()}>
+          Log Out
+        </div>
+        <div className="drawer-link" onClick={toggleDarkMode}>
+          {darkMode ? "🌙 Dark Mode" : "☀️ Light Mode"}
+        </div>
       </div>
-      <div className="header__right">
-        {session?.data && (
-          <div className="link" onClick={() => signOut()}>
-            Log Out
-          </div>
-        )}
-      </div>
-    </div>
+    </header>
   );
 };
 
