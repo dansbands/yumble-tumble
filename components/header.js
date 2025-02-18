@@ -56,6 +56,12 @@ const Header = () => {
         ☰
       </button>
 
+      {/* Backdrop (Closes Drawer on Click) */}
+      <div
+        className={`backdrop ${isOpen ? "open" : ""}`}
+        onClick={() => setIsOpen(false)}
+      ></div>
+
       {/* Mobile Drawer */}
       <div className={`drawer ${isOpen ? "open" : ""}`}>
         <button className="close-btn" onClick={() => setIsOpen(false)}>
