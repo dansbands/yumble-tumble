@@ -2,18 +2,61 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import "styles/header.css";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const session = useSession();
+
+  const MenuContent = ({ isDrawer }) => (
+    <>
+      {session?.data ? (
+        <>
+          <Link href="/dashboard" passHref>
+            <div className={isDrawer ? "drawer-link" : "link"}>Dashboard</div>
+          </Link>
+          <Link href="/profile" passHref>
+            <div className={isDrawer ? "drawer-link" : "link"}>Profile</div>
+          </Link>
+          <div
+            className={isDrawer ? "drawer-link" : "link"}
+            onClick={() => signOut()}
+          >
+            Log Out
+          </div>
+          <button
+            className={isDrawer ? "drawer-link" : "link"}
+            onClick={toggleDarkMode}
+          >
+            {isDrawer
+              ? darkMode
+                ? "🌙 Dark Mode"
+                : "☀️ Light Mode"
+              : darkMode
+              ? "🌙"
+              : "☀️"}
+          </button>
+        </>
+      ) : (
+        <>
+          <Link href="/signup" passHref>
+            <div className={isDrawer ? "drawer-link" : "link"}>Sign Up</div>
+          </Link>
+          <Link href="/login" passHref>
+            <div className={isDrawer ? "drawer-link" : "link"}>Sign In</div>
+          </Link>
+        </>
+      )}
+    </>
+  );
 
   // Close the menu when Esc is pressed
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        console.log('e.key', e.key)
+        console.log("e.key", e.key);
         setIsOpen(false);
       }
     };
@@ -53,18 +96,7 @@ const Header = () => {
 
       {/* Center & Right - Desktop */}
       <nav className="header__center">
-        <Link href="/signup" passHref>
-          <div className="link">Sign Up</div>
-        </Link>
-        <Link href="/login" passHref>
-          <div className="link">Sign In</div>
-        </Link>
-        <div className="link" onClick={() => signOut()}>
-          Log Out
-        </div>
-        <button className="link" onClick={toggleDarkMode}>
-          {darkMode ? "🌙" : "☀️"}
-        </button>
+        <MenuContent />
       </nav>
 
       {/* Animated Hamburger Button */}
@@ -87,18 +119,7 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <div className={`drawer ${isOpen ? "open" : ""}`}>
-        <Link href="/signup" passHref>
-          <div className="drawer-link">Sign Up</div>
-        </Link>
-        <Link href="/login" passHref>
-          <div className="drawer-link">Sign In</div>
-        </Link>
-        <div className="drawer-link" onClick={() => signOut()}>
-          Log Out
-        </div>
-        <div className="drawer-link" onClick={toggleDarkMode}>
-          {darkMode ? "🌙 Dark Mode" : "☀️ Light Mode"}
-        </div>
+        <MenuContent isDrawer />
       </div>
     </header>
   );
