@@ -1,9 +1,13 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import "styles/header.css";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const Header = () => {
+  const session = useSession();
+
   return (
     <div className="header">
       <div className="header__left">
@@ -12,17 +16,32 @@ const Header = () => {
         </Link>
       </div>
       <div className="header__center">
-        <Link href="/signup" passHref>
-          <div className="link">Sign Up</div>
-        </Link>
-        <Link href="/login" passHref>
-          <div className="link">Sign In</div>
-        </Link>
+        {session?.data ? (
+          <>
+            <Link href="/dashboard" passHref>
+              <div className="link">Dashboard</div>
+            </Link>
+            <Link href="/profile" passHref>
+              <div className="link">Profile</div>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href="/signup" passHref>
+              <div className="link">Sign Up</div>
+            </Link>
+            <Link href="/login" passHref>
+              <div className="link">Sign In</div>
+            </Link>
+          </>
+        )}
       </div>
       <div className="header__right">
-        <div className="link" onClick={() => signOut()}>
-          Log Out
-        </div>
+        {session?.data && (
+          <div className="link" onClick={() => signOut()}>
+            Log Out
+          </div>
+        )}
       </div>
     </div>
   );

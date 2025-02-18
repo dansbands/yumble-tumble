@@ -6,7 +6,6 @@ import Link from "next/link";
 
 export default function Home() {
   const session = useSession();
-  console.log("session", session);
 
   return (
     <div>
