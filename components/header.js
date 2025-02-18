@@ -9,6 +9,22 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
+  // Close the menu when Esc is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        console.log('e.key', e.key)
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   // Load dark mode from localStorage
   useEffect(() => {
     const storedMode = localStorage.getItem("darkMode");
