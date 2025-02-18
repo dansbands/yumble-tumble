@@ -1,49 +1,64 @@
 "use client";
-
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import "styles/auth.css";
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
-
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await signIn("credentials", {
+    setLoading(true);
+    setError(null);
+
+    const res = await signIn("credentials", {
+      email,
+      password,
       redirect: false,
-      email: formData.email,
-      password: formData.password,
     });
-    if (!result || result.error) setError("Invalid credentials");
-    else window.location.href = "/";
+
+    if (res?.error) {
+      setError("Invalid credentials. Try again.");
+      setLoading(false);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
+        <label>Email:</label>
         <input
           type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
+
+        <label>Password:</label>
         <input
           type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error && <p>{error}</p>}
-        <button type="submit">Login</button>
+
+        {error && <p className="error">{error}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
+      <p>
+        Don’t have an account? <a href="/signup">Sign up</a>
+      </p>
     </div>
   );
 }

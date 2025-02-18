@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import "./header.css";
+import "styles/header.css";
 import { signOut } from "next-auth/react";
 
 const Header = () => {
