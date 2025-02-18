@@ -12,7 +12,7 @@ const Header = () => {
     <div className="header">
       <div className="header__left">
         <Link href="/" passHref>
-          <div className="title">Header</div>
+          <div className="title">MyNewApp</div>
         </Link>
       </div>
       <div className="header__center">
