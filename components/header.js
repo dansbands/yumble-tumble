@@ -51,9 +51,16 @@ const Header = () => {
         </button>
       </nav>
 
-      {/* Mobile Menu Button */}
-      <button className="menu-btn" onClick={() => setIsOpen(!isOpen)}>
-        ☰
+      {/* Animated Hamburger Button */}
+      <button
+        className={`menu-btn ${isOpen ? "open" : ""}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className={`bar-container ${isOpen ? "open" : ""}`}>
+          <div className="bar"></div>
+          <div className="bar"></div>
+          <div className="bar"></div>
+        </div>
       </button>
 
       {/* Backdrop (Closes Drawer on Click) */}
@@ -64,9 +71,6 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <div className={`drawer ${isOpen ? "open" : ""}`}>
-        <button className="close-btn" onClick={() => setIsOpen(false)}>
-          ×
-        </button>
         <Link href="/signup" passHref>
           <div className="drawer-link">Sign Up</div>
         </Link>

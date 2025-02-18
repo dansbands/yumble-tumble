@@ -57,14 +57,62 @@
   color: var(--link-hover);
 }
 
-/* Hamburger Menu Button */
+/* Menu Button */
 .menu-btn {
-  display: none;
-  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  position: relative;
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-color);
+  z-index: 1000; /* Ensure it's above the drawer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+/* Bars inside the button */
+.menu-btn .bar {
+  position: absolute;
+  width: 30px;
+  height: 4px;
+  background: white;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+/* Top Bar */
+.menu-btn .bar:nth-child(1) {
+  top: 10px;
+}
+
+/* Middle Bar */
+.menu-btn .bar:nth-child(2) {
+  top: 18px;
+}
+
+/* Bottom Bar */
+.menu-btn .bar:nth-child(3) {
+  top: 26px;
+}
+
+/* Light Mode Hamburger Button (Visible) */
+html:not(.dark-mode) .menu-btn .bar {
+  background: #333; /* Dark color for light mode */
+}
+
+/* When the menu is open */
+.menu-btn.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-btn.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-btn.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Backdrop Overlay */
