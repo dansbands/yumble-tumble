@@ -24,6 +24,7 @@
   height: 60px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
@@ -41,8 +42,21 @@
 
 /* Center Links - Hidden on Mobile */
 .header__center {
+  /* border: 1px solid red; */
+  flex: 0 0 80%;
   display: flex;
+  align-items: center;
   gap: 20px;
+  position: relative;
+
+  button {
+    width: 30px;
+    height: 30px;
+    padding: unset;
+    border-radius: 15px;
+    position: absolute;
+    right: 0;
+  }
 }
 
 .link {
@@ -72,11 +86,26 @@
   transition: 0.3s ease;
 }
 
+.bar-container {
+  transform: rotate(-180deg);
+  transition: all 0.45s ease-in-out;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.bar-container.open {
+  transform: rotate(180deg);
+  transition: all 0.45s ease-in-out;
+}
+
 /* Bars inside the button */
 .menu-btn .bar {
   position: absolute;
   width: 30px;
-  height: 4px;
+  height: 2px;
   background: white;
   transition: all 0.3s ease-in-out;
   border-radius: 2px;
@@ -114,6 +143,10 @@ html:not(.dark-mode) .menu-btn .bar {
 .menu-btn.open .bar:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
+
+/* .menu-btn.open .bar-container {
+  transform: rotate(90deg);
+} */
 
 /* Backdrop Overlay */
 .backdrop {
