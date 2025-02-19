@@ -80,7 +80,7 @@ const Header = () => {
       <div className={`drawer ${isOpen ? "open" : ""}`}>
         <MenuContent
           darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
+          toggleDarkMode={switchDarkMode}
           isDrawer
         />
       </div>
