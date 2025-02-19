@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import "styles/header.css";
 import MenuContent from "./MenuContent";
+import { useTheme } from "@/context/theme";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   // Close the menu when Esc is pressed
   useEffect(() => {
@@ -30,14 +31,15 @@ const Header = () => {
     const storedMode = localStorage.getItem("darkMode");
     if (storedMode === "true") {
       document.documentElement.classList.add("dark-mode");
-      setDarkMode(true);
+      toggleDarkMode();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Toggle dark mode
-  const toggleDarkMode = () => {
+  const switchDarkMode = () => {
     const newMode = !darkMode;
-    setDarkMode(newMode);
+    toggleDarkMode(newMode);
     localStorage.setItem("darkMode", newMode);
     document.documentElement.classList.toggle("dark-mode", newMode);
   };
@@ -53,7 +55,7 @@ const Header = () => {
 
       {/* Center & Right - Desktop */}
       <nav className="header__center">
-        <MenuContent darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <MenuContent darkMode={darkMode} toggleDarkMode={switchDarkMode} />
       </nav>
 
       {/* Animated Hamburger Button */}
