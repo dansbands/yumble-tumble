@@ -8,6 +8,9 @@ const MenuContent = ({ isDrawer, darkMode, toggleDarkMode }) => {
     <>
       {session?.data ? (
         <>
+          <Link href="/" passHref>
+            <div className={isDrawer ? "drawer-link" : "link"}>Home</div>
+          </Link>
           <Link href="/dashboard" passHref>
             <div className={isDrawer ? "drawer-link" : "link"}>Dashboard</div>
           </Link>
