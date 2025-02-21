@@ -1,0 +1,226 @@
+/* Light & Dark Mode Variables */
+:root {
+  --bg-color: white;
+  --text-color: black;
+  --border-color: #ccc;
+  --link-color: #007bff;
+  --link-hover: #0056b3;
+  --drawer-bg: white;
+  --drawer-text: black;
+}
+
+.dark-mode {
+  --bg-color: #121212;
+  --text-color: white;
+  --border-color: #333;
+  --link-color: #66b2ff;
+  --link-hover: #99ccff;
+  --drawer-bg: #1e1e1e;
+  --drawer-text: white;
+}
+
+/* Header Styles */
+.header {
+  height: 60px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  position: relative;
+  transition: background 0.3s, color 0.3s;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Center Links - Hidden on Mobile */
+.header__center {
+  /* border: 1px solid red; */
+  flex: 0 0 80%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+
+  button {
+    width: 30px;
+    height: 30px;
+    padding: unset;
+    border-radius: 15px;
+    position: absolute;
+    right: 0;
+  }
+}
+
+.link {
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.link:hover {
+  color: var(--link-hover);
+}
+
+/* Menu Button */
+.menu-btn {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above the drawer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+.bar-container {
+  transform: rotate(-180deg);
+  transition: all 0.45s ease-in-out;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.bar-container.open {
+  transform: rotate(180deg);
+  transition: all 0.45s ease-in-out;
+}
+
+/* Bars inside the button */
+.menu-btn .bar {
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background: white;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+/* Top Bar */
+.menu-btn .bar:nth-child(1) {
+  top: 10px;
+}
+
+/* Middle Bar */
+.menu-btn .bar:nth-child(2) {
+  top: 18px;
+}
+
+/* Bottom Bar */
+.menu-btn .bar:nth-child(3) {
+  top: 26px;
+}
+
+/* Light Mode Hamburger Button (Visible) */
+html:not(.dark-mode) .menu-btn .bar {
+  background: #333; /* Dark color for light mode */
+}
+
+/* When the menu is open */
+.menu-btn.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-btn.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-btn.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* .menu-btn.open .bar-container {
+  transform: rotate(90deg);
+} */
+
+/* Backdrop Overlay */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s;
+  z-index: 998;
+}
+
+.backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Drawer (Hidden by Default) */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background: var(--drawer-bg);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  transition: right 0.3s ease-in-out;
+  z-index: 999;
+}
+
+.drawer.open {
+  right: 0;
+}
+
+.drawer-link {
+  padding: 15px;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--drawer-text);
+  width: 100%;
+  text-align: center;
+  transition: background 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.drawer-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--drawer-text);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .header__center {
+    display: none;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+}

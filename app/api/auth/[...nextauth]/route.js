@@ -1,36 +1,42 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcryptjs";
-import dbConnect from "@/lib/dbConnect";
+import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/models/User";
+import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "your@email.com" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await dbConnect();
-
+        await connectToDatabase();
         const user = await User.findOne({ email: credentials.email });
-        if (!user) return null;
+        if (
+          !user ||
+          !(await bcrypt.compare(credentials.password, user.password))
+        )
+          throw new Error("Invalid credentials");
 
-        const isValid = await compare(credentials.password, user.password);
-        if (!isValid) return null;
-
-        return {
-          id: user._id.toString(),
-          name: user.username,
-          email: user.email,
-        };
+        return { id: user._id.toString(), name: user.name, email: user.email };
       },
     }),
   ],
+  pages: { signIn: "/login" },
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) session.user.id = token.id;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
